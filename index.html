@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chúc Mừng Năm Mới 2026 🎆</title>
+
+  <style>
+    :root{
+      --gold1:#fff1b8;
+      --gold2:#ffd36b;
+      --gold3:#ffb700;
+
+      --red1:#ff3b3b;
+      --red2:#c40000;
+      --red3:#6b0000;
+    }
+
+    *{ box-sizing:border-box; }
+
+    body{
+      margin:0;
+      overflow:hidden;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:#fff;
+      background: linear-gradient(180deg, var(--red1) 0%, var(--red2) 45%, var(--red3) 100%);
+    }
+
+    canvas{
+      position:fixed;
+      inset:0;
+      width:100vw;
+      height:100vh;
+      z-index:1;
+    }
+
+    .bg{
+      position:fixed;
+      inset:0;
+      z-index:2;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.10), transparent 45%),
+        radial-gradient(circle at 80% 25%, rgba(255,255,255,0.08), transparent 50%),
+        radial-gradient(circle at 50% 85%, rgba(255, 230, 160, 0.12), transparent 55%),
+        repeating-linear-gradient(45deg,
+          rgba(255,255,255,0.04) 0px,
+          rgba(255,255,255,0.04) 7px,
+          transparent 7px,
+          transparent 20px);
+      opacity:0.6;
+      mix-blend-mode: overlay;
+    }
+
+    .wrap{
+      position:fixed;
+      inset:0;
+      z-index:3;
+      display:grid;
+      place-items:center;
+      padding:18px;
+      text-align:center;
+    }
+
+    .card{
+      width:min(780px, 96vw);
+      padding:26px 18px;
+      border-radius:26px;
+      background: rgba(0,0,0,0.18);
+      border: 1px solid rgba(255, 211, 107, 0.28);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.35);
+      backdrop-filter: blur(8px);
+    }
+
+    .title{
+      margin:0;
+      font-size: clamp(30px, 6.2vw, 62px);
+      font-weight: 950;
+      letter-spacing: 1px;
+      line-height: 1.05;
+      background: linear-gradient(90deg, var(--gold1), var(--gold2), var(--gold3), var(--gold1));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      text-shadow: 0 12px 40px rgba(0,0,0,0.35);
+    }
+
+    .year{
+      margin-top: 8px;
+      font-size: clamp(22px, 5vw, 42px);
+      font-weight: 900;
+      color: rgba(255,255,255,0.92);
+      text-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+
+    .wish{
+      margin:18px auto 0;
+      padding:16px 16px;
+      border-radius:18px;
+      background: rgba(120,0,0,0.28);
+      border: 1px solid rgba(255, 211, 107, 0.25);
+      font-size: clamp(16px, 3.6vw, 24px);
+      line-height: 1.55;
+    }
+
+    .wish b{
+      color: var(--gold2);
+    }
+
+    .actions{
+      margin-top:16px;
+      display:flex;
+      justify-content:center;
+    }
+
+    button{
+      border:none;
+      cursor:pointer;
+      border-radius:999px;
+      padding:12px 16px;
+      font-size:15px;
+      font-weight:900;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      user-select:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    button:active{ transform: scale(0.98); }
+    button:hover{ opacity:0.95; }
+
+    .btn-primary{
+      background: linear-gradient(90deg, var(--gold2), var(--gold3));
+      color:#2b0000;
+      box-shadow: 0 18px 45px rgba(255, 183, 0, 0.25);
+    }
+
+    .hint{
+      margin-top: 12px;
+      font-size: 13px;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="fx"></canvas>
+  <div class="bg"></div>
+
+  <div class="wrap">
+    <div class="card">
+      <h1 class="title">CHÚC MỪNG NĂM MỚI</h1>
+      <div class="year">2026</div>
+
+      <div class="wish">
+        ✨ <b>Chúc Năm Mới Vui Vẻ</b> ✨<br/>
+        🍀 <b>Gặp Nhiều May Mắn</b> 🍀<br/>
+        🏆 <b>Đánh Đâu Thắng Đó</b> 🏆
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ===== Canvas pháo hoa =====
+    const canvas = document.getElementById("fx");
+    const ctx = canvas.getContext("2d");
+
+    let W, H, DPR;
+
+    function resize(){
+      DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      W = Math.floor(window.innerWidth);
+      H = Math.floor(window.innerHeight);
+
+      canvas.width = Math.floor(W * DPR);
+      canvas.height = Math.floor(H * DPR);
+
+      canvas.style.width = W + "px";
+      canvas.style.height = H + "px";
+
+      ctx.setTransform(DPR,0,0,DPR,0,0);
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function rand(min,max){ return Math.random()*(max-min)+min; }
+
+    // ===== TẠO SHAPE CON NGỰA BẰNG ĐIỂM (SILHOUETTE) =====
+    // Đây là bộ điểm (x,y) đơn giản mô phỏng con ngựa
+    // (dạng pixel art, để nổ pháo hoa ra hình ngựa)
+    const horsePoints = [
+      // đầu + cổ
+      [-22,-10],[-21,-13],[-19,-15],[-16,-16],[-13,-16],[-10,-15],[-8,-13],[-6,-11],
+      [-5,-8],[-6,-6],[-8,-4],[-10,-3],[-12,-2],[-14,-2],[-16,-3],
+      // thân
+      [-15,0],[-13,2],[-10,3],[-6,4],[-2,4],[2,4],[6,3],[10,2],[13,0],
+      [15,-2],[16,-5],[15,-8],[13,-10],[10,-11],[6,-11],[2,-10],[-2,-9],[-6,-8],[-10,-7],[-13,-6],
+      // chân trước
+      [-2,5],[-3,9],[-4,13],[-5,17],
+      [2,5],[3,9],[4,13],[5,17],
+      // chân sau
+      [10,4],[11,9],[12,13],[13,17],
+      [6,4],[7,9],[8,13],[9,17],
+      // đuôi
+      [16,-4],[18,-2],[20,0],[21,2],[20,4],[18,5]
+    ];
+
+    // Scale để hình ngựa lớn hơn
+    function getHorseParticles(x,y,hue){
+      const scale = rand(4.2, 5.6); // độ lớn ngựa
+      const list = [];
+
+      for(const pt of horsePoints){
+        const px = x + pt[0]*scale;
+        const py = y + pt[1]*scale;
+
+        // tạo particle bay từ tâm ra đúng vị trí
+        const dx = px - x;
+        const dy = py - y;
+
+        // tốc độ để bay ra hình ngựa
+        const speed = rand(0.9, 1.15);
+
+        list.push({
+          x, y,
+          vx: dx * 0.03 * speed,
+          vy: dy * 0.03 * speed,
+          g: 0.02,
+          drag: 0.96,
+          hue: hue + rand(-12, 12),
+          alpha: 1,
+          decay: rand(0.012, 0.02),
+          size: rand(1.6, 2.6)
+        });
+      }
+      return list;
+    }
+
+    const rockets = [];
+    const particles = [];
+
+    function launch(x = rand(W*0.15, W*0.85), y = H){
+      rockets.push({
+        x, y,
+        vx: rand(-1.0, 1.0),
+        vy: rand(-11.0, -14.0),
+        hue: rand(0, 360),
+        explodeAt: rand(H*0.18, H*0.42)
+      });
+    }
+
+    function explodeHorse(x,y,hue){
+      // mỗi lần nổ = 1 con ngựa
+      const horse = getHorseParticles(x,y,hue);
+      particles.push(...horse);
+    }
+
+    function tick(){
+      requestAnimationFrame(tick);
+
+      // tạo vệt mờ
+      ctx.fillStyle = "rgba(80, 0, 0, 0.22)";
+      ctx.fillRect(0,0,W,H);
+
+      // auto phóng pháo
+      if(Math.random() < 0.06) launch();
+      if(Math.random() < 0.02) launch(rand(W*0.1, W*0.9), H);
+
+      // rockets
+      for(let i=rockets.length-1;i>=0;i--){
+        const r = rockets[i];
+        r.x += r.vx;
+        r.y += r.vy;
+        r.vy += 0.12;
+
+        ctx.beginPath();
+        ctx.arc(r.x, r.y, 2.2, 0, Math.PI*2);
+        ctx.fillStyle = `hsl(${r.hue} 95% 70%)`;
+        ctx.fill();
+
+        if(r.y <= r.explodeAt || r.vy >= 0){
+          explodeHorse(r.x, r.y, r.hue);
+          rockets.splice(i,1);
+        }
+      }
+
+      // particles (ngựa)
+      for(let i=particles.length-1;i>=0;i--){
+        const p = particles[i];
+        p.vx *= p.drag;
+        p.vy *= p.drag;
+        p.vy += p.g;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.alpha -= p.decay;
+
+        if(p.alpha <= 0){
+          particles.splice(i,1);
+          continue;
+        }
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+        ctx.fillStyle = `hsla(${p.hue} 95% 65% / ${p.alpha})`;
+        ctx.fill();
+      }
+    }
+    tick();
+
+    // chạm màn hình => nổ ngựa
+    window.addEventListener("pointerdown", (e)=>{
+      explodeHorse(e.clientX, e.clientY, rand(0,360));
+    });
+
+    // Share
+    document.getElementById("btnShare").addEventListener("click", async ()=>{
+      const shareData = {
+        title: "Chúc Mừng Năm Mới 2026 🎆",
+        text: "Chúc Năm Mới Vui Vẻ – Gặp Nhiều May Mắn – Đánh Đâu Thắng Đó 🎆🐴",
+        url: location.href
+      };
+
+      if(navigator.share){
+        try{ await navigator.share(shareData); } catch(e){}
+      }else{
+        try{
+          await navigator.clipboard.writeText(location.href);
+          alert("Máy bạn không hỗ trợ share trực tiếp. Mình đã copy link để bạn dán gửi nhé!");
+        }catch{
+          alert("Bạn copy link trên thanh địa chỉ để gửi nhé!");
+        }
+      }
+    });
+  </script>
+</body>
+</html>
